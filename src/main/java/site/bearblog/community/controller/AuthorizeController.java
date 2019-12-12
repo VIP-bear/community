@@ -11,7 +11,8 @@ import site.bearblog.community.mapper.UserMapper;
 import site.bearblog.community.model.User;
 import site.bearblog.community.provider.GithubProvider;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
@@ -36,7 +37,7 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request){
+                           HttpServletResponse response){
         //  封装accessToken对象获取access_token
         AccessTokenDto accessTokenDto = new AccessTokenDto();
         accessTokenDto.setClient_id(clientId);
@@ -49,14 +50,14 @@ public class AuthorizeController {
         GithubUser githubUser = githubProvider.getUser(accessToken);
         if (githubUser != null){
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(githubUser.getLogin());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
-            // 登陆成功，写cookie和session
-            request.getSession().setAttribute("user", githubUser);
+            response.addCookie(new Cookie("token", token));
             // 跳转到index页面
             return "redirect:/";
         }else {
