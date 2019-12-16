@@ -8,7 +8,7 @@
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">community</span>
                 </button>
-                <a class="navbar-brand" href="#">community</a>
+                <a class="navbar-brand" href="/">community</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-left">
@@ -24,13 +24,13 @@
                     <li class="dropdown" th:if="${session.user != null}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true" aria-expanded="false">
-                            <span  th:text="${session.user.getName()}"></span>
+                            <span th:text="${session.user.getName()}"></span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/questions">我的问题</a></li>
                             <li><a href="#">个人资料</a></li>
-                            <li><a href="#">退出登录</a></li>
+                            <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
                     <li th:if="${session.user == null}">
