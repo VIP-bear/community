@@ -1,10 +1,6 @@
 package site.bearblog.community.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import site.bearblog.community.dto.QuestionDTO;
+import org.apache.ibatis.annotations.*;
 import site.bearblog.community.model.Question;
 
 import java.util.List;
@@ -22,11 +18,20 @@ public interface QuestionMapper {
     Integer count();
 
     @Select("select * from question where creator = #{userId} limit #{offset},#{size}")
-    List<Question> listByUserId(@Param("userId")Integer userId, @Param(value = "offset")Integer offset, @Param(value = "size")Integer size);
+    List<Question> listByUserId(@Param("userId")Long userId, @Param(value = "offset")Integer offset, @Param(value = "size")Integer size);
 
     @Select("select count(1) from question where creator = #{userId}")
-    Integer countByUserId(@Param("userId")Integer userId);
+    Integer countByUserId(@Param("userId")Long userId);
 
     @Select("select * from question where id = #{id}")
-    Question getById(@Param("id")Integer id);
+    Question getById(@Param("id")Long id);
+
+    @Update("update question set title= #{title}, description = #{description}, gmt_modified = #{gmtModified}, tag = #{tag} where id = #{id}")
+    int update(Question question);
+
+    @Update("update question set view_count = view_count+1 where id = #{id}")
+    void incViewCount(@Param("id")Long id);
+
+    @Update("update question set comment_count = comment_count+1 where id = #{id}")
+    void incCommentCount(@Param("id")Long id);
 }

@@ -13,7 +13,7 @@ public interface UserMapper {
     User findByToken(@Param("token") String token);
 
     @Select("select * from user where id = #{id}")
-    User finById(@Param("id") Integer id);
+    User finById(@Param("id") Long id);
 
     @Select("select * from user where account_id = #{accountId}")
     User finByAccountId(@Param("accountId")String accountId);

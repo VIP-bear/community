@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import site.bearblog.community.dto.PaginationDTO;
 import site.bearblog.community.dto.QuestionDTO;
+import site.bearblog.community.exception.CustomizeErrorCode;
+import site.bearblog.community.exception.CustomizeException;
 import site.bearblog.community.mapper.QuestionMapper;
 import site.bearblog.community.mapper.UserMapper;
 import site.bearblog.community.model.Question;
@@ -21,7 +23,7 @@ public class QuestionService {
 
     @Autowired
     private UserMapper userMapper;
-
+    // 根据页数获取问题列表
     public PaginationDTO list(Integer page, Integer size){
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
@@ -54,7 +56,8 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    // 根据用户id和页数获取用户问题列表
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
         Integer totalCount = questionMapper.countByUserId(userId);
@@ -87,12 +90,38 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    // 通过问题id获取问题
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.getById(id);
+        if (question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.finById(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
+    }
+
+    // 更新或者创建问题
+    public void createOrUpdate(Question question) {
+        if (question.getId() == null){
+            // 创建
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.create(question);
+        }else {
+            // 更新
+            question.setGmtModified(question.getGmtCreate());
+            int updated = questionMapper.update(question);
+            if (updated != 1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+        }
+    }
+
+    // 增加阅读数
+    public void incView(Long id) {
+        questionMapper.incViewCount(id);
     }
 }
