@@ -11,7 +11,7 @@ public interface QuestionMapper {
             "(#{title}, #{description}, #{gmtCreate}, #{gmtModified}, #{creator}, #{tag} )")
     void create(Question question);
 
-    @Select("select * from question limit #{offset},#{size}")
+    @Select("select * from question order by gmt_create desc limit #{offset},#{size}")
     List<Question> list(@Param("offset") Integer offset, @Param("size")Integer size);
 
     @Select("select count(1) from question")
@@ -25,6 +25,9 @@ public interface QuestionMapper {
 
     @Select("select * from question where id = #{id}")
     Question getById(@Param("id")Long id);
+
+    @Select("select * from question where id != #{id} and tag REGEXP #{tag}")
+    List<Question> selectRelated(@Param("id")Long id, @Param("tag")String tag);
 
     @Update("update question set title= #{title}, description = #{description}, gmt_modified = #{gmtModified}, tag = #{tag} where id = #{id}")
     int update(Question question);
