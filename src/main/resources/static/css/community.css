@@ -37,8 +37,17 @@ body{
     list-style: none;
     padding-left: 0;
 }
+.publish-tag-tag {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+.publish-tag-tag .label-info {
+    margin: 5px;
+    white-space: normal;
+    display: inline-block;
+}
 .community-menu {
-    display: block;
     color: #999;
     font-size: 12px;
     margin-bottom: 15px;
