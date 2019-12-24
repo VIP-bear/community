@@ -6,10 +6,14 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
+    <link rel="stylesheet" href="/css/editormd.preview.min.css"/>
     <script type="application/javascript" src="/js/jquery-3.4.1.min.js"></script>
     <script type="application/javascript" src="/js/bootstrap.min.js"></script>
     <script type="application/javascript" src="/js/community.js"></script>
     <script type="application/javascript" src="/js/moment.js"></script>
+    <script type="application/javascript" src="/js/editormd.min.js"></script>
+    <script type="application/javascript" src="/js/lib/marked.min.js"></script>
+    <script type="application/javascript" src="/js/lib/prettify.min.js"></script>
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
@@ -27,9 +31,14 @@
                 </span>
                 <!--内容-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
-                     th:text="${question.description}">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
+                    <textarea th:text="${question.description}" style="display:none;"></textarea>
                 </div>
+                <script type="text/javascript">
+                    $(function() {
+                        editormd.markdownToHTML("question-view",{});
+                    });
+                </script>
                 <!--标签-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -139,7 +148,7 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>我的头像</h4>
-                <img class="img-thumbnail" src="/image/test.png" alt="" width="150px">
+                <img class="img-thumbnail" src="/images/test.png" alt="" width="150px">
             </div>
             <!--相关问题-->
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
