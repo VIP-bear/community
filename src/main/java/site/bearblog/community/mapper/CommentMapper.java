@@ -15,7 +15,8 @@ public interface CommentMapper {
     @Select("select * from comment where id = #{parentId}")
     Comment selectById(@Param("parentId")Long parentId);
 
-    @Select("select * from comment where parent_id = #{id} and type = #{type} order by gmt_create desc")
+    // 倒序在末尾加order by gmt_create desc
+    @Select("select * from comment where parent_id = #{id} and type = #{type}")
     List<Comment> selectByParentIdAndType(@Param("id")Long id, @Param("type")Integer type);
 
     @Update("update comment set comment_count = comment_count+1 where id = #{id}")

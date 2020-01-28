@@ -80,16 +80,17 @@ public class CommentService {
     }
 
     private void createNotify(Comment comment, Long receiver, String notifyName, String outerTitle, Integer type, Long outerId) {
-        Notification notification = new Notification();
-        notification.setGmtCreate(System.currentTimeMillis());
-        notification.setType(type);
-        notification.setOuterId(outerId);
-        notification.setNotifier(comment.getCommentator());
-        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
-        notification.setReceiver(receiver);
-        notification.setNotifierName(notifyName);
-        notification.setOuterTitle(outerTitle);
-        notificationMapper.insetNotification(notification);
+        if (receiver != comment.getCommentator()) {
+            Notification notification = new Notification();
+            notification.setGmtCreate(System.currentTimeMillis());
+            notification.setType(type);
+            notification.setOuterId(outerId);
+            notification.setNotifier(comment.getCommentator());
+            notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+            notification.setReceiver(receiver);
+            notification.setNotifierName(notifyName);
+            notification.setOuterTitle(outerTitle);
+        }
     }
 
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
