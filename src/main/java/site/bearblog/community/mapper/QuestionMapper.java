@@ -14,8 +14,14 @@ public interface QuestionMapper {
     @Select("select * from question order by gmt_create desc limit #{offset},#{size}")
     List<Question> list(@Param("offset") Integer offset, @Param("size")Integer size);
 
-    @Select("select count(1) from question")
+    @Select("select * from question where title REGEXP #{search} order by gmt_create desc limit #{offset},#{size}")
+    List<Question> listBySearch(@Param("search") String search, @Param("offset") Integer offset, @Param("size")Integer size);
+
+    @Select("select count(*) from question")
     Integer count();
+
+    @Select("select count(*) from question where title REGEXP #{search}")
+    Integer countBySearch(@Param("search")String search);
 
     @Select("select * from question where creator = #{userId} limit #{offset},#{size}")
     List<Question> listByUserId(@Param("userId")Long userId, @Param(value = "offset")Integer offset, @Param(value = "size")Integer size);

@@ -25,11 +25,17 @@ public class QuestionService {
 
     @Autowired
     private UserMapper userMapper;
-    // 根据页数获取问题列表
-    public PaginationDTO list(Integer page, Integer size){
+    // 根据页数和搜索获取问题列表
+    public PaginationDTO list(String search, Integer page, Integer size){
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
-        Integer totalCount = questionMapper.count();
+        Integer totalCount;
+        if (StringUtils.isNotBlank(search)){
+            search = search.replace(" ","|");
+            totalCount = questionMapper.countBySearch(search);
+        }else {
+            totalCount = questionMapper.count();
+        }
         if (totalCount % size == 0){
             totalPage = totalCount / size;
         }else {
@@ -45,7 +51,15 @@ public class QuestionService {
         paginationDTO.setPagination(totalPage, page);
 
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.list(offset, size);
+        if (offset < 0){
+            offset = 0;
+        }
+        List<Question> questions;
+        if (StringUtils.isNotBlank(search)){
+            questions = questionMapper.listBySearch(search, offset, size);
+        }else {
+            questions = questionMapper.list(offset, size);
+        }
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions){
             User user = userMapper.finById(question.getCreator());

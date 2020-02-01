@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import site.bearblog.community.dto.PaginationDTO;
 import site.bearblog.community.service.QuestionService;
 
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class IndexController {
@@ -17,13 +16,14 @@ public class IndexController {
 
     // 进入首页，拿到cookie中的token的value，去数据库中查询
     @GetMapping("/")
-    public String index(HttpServletRequest request,
-                        Model model,
+    public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
-                        @RequestParam(name = "size", defaultValue = "5") Integer size){
+                        @RequestParam(name = "size", defaultValue = "5") Integer size,
+                        @RequestParam(name = "search", required = false) String search){
 
-        PaginationDTO pagination = questionService.list(page, size);
+        PaginationDTO pagination = questionService.list(search, page, size);
         model.addAttribute("pagination", pagination);
+        model.addAttribute("search", search);
         return "index";
     }
 }
