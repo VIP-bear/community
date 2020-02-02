@@ -12,7 +12,7 @@ import site.bearblog.community.provider.AliyunProvider;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class Fileontroller {
+public class FileController {
 
     @Autowired
     private AliyunProvider aliyunProvider;

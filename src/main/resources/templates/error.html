@@ -12,10 +12,11 @@
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
-    <div class="jumbotron">
-        <h1>出错啦！！！</h1>
-        <p th:text="${message}">服务太热啦，要不稍等下来试试···</p>
-        <p><a class="btn btn-primary btn-lg" href="/" role="button">回到首页</a></p>
-    </div>
+<div class="jumbotron">
+    <h1>出错啦！！！</h1>
+    <p th:text="${message}">服务太热啦，要不稍等下来试试···</p>
+    <p><a class="btn btn-primary btn-lg" href="/" role="button">回到首页</a></p>
+</div>
+<div th:insert="footer :: foot"></div>
 </body>
 </html>
